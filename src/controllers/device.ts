@@ -235,7 +235,7 @@ export const getUserDevices = async (
       return next(customError);
     }
     const devices = await Device.find({ clientId: user.clientId }).lean();
-    const client: IClient | null = await Client.findOne({
+    const client = await Client.findOne({
       id: user.clientId,
     }).lean();
 

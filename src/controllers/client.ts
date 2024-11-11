@@ -196,7 +196,7 @@ export const getClient = async (
       );
       return next(customError);
     }
-    const client: IClient | null = await Client.findOne({
+    const client = await Client.findOne({
       id: clientId,
     }).lean();
     if (!client) {
@@ -266,7 +266,7 @@ export const getAllClient = async (
   next: NextFunction
 ) => {
   try {
-    const clients: IClient[] = await Client.find().lean();
+    const clients = await Client.find().lean();
     const clientUsers: IUser[] = await User.find({
       clientId: { $in: clients.map((c) => c.id) },
     }).lean();

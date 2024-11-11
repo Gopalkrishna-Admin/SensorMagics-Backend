@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 
-export interface IWeatherData extends Document {
+export interface IWeatherData {
   id: string;
   temperature: number;
   humidity: number;
@@ -26,13 +26,13 @@ export interface IWeatherData extends Document {
   updatedAt: Date;
 }
 
-export interface IPreference extends Document {
+export interface IPreference {
   id: string;
   userId: string;
   preference: string;
 }
 
-export interface IWeatherDataRange extends Document {
+export interface IWeatherDataRange {
   id: string;
   temperatureMin: number;
   temperatureMax: number;
@@ -101,7 +101,7 @@ export enum EJobStatus {
   FAILED = "FAILED"
 }
 
-export interface IUser extends Document {
+export interface IUser {
   id: string;
   name: string;
   email: string;
@@ -113,7 +113,7 @@ export interface IUser extends Document {
   updatedAt: Date;
 }
 
-export interface IGasMapping extends Document {
+export interface IGasMapping {
   gas1: string;
   gas2: string;
   gas3: string;
@@ -123,13 +123,13 @@ export interface IGasMapping extends Document {
   clientId: string;
 }
 
-export interface ISession extends Document {
+export interface ISession {
   id: string;
   userId: string;
   jwt: string;
   isValid: boolean;
 }
-export interface IClient extends Document {
+export interface IClient {
   id: string;
   name: string;
   logo: Buffer;
@@ -145,7 +145,7 @@ export interface IClient extends Document {
   updatedAt: Date;
 }
 
-export interface IJob extends Document {
+export interface IJob {
   id: string;
   deviceId: string;
   userId: string;
@@ -174,7 +174,7 @@ export interface IDeviceDto extends Omit<IDevice, keyof Document> {
 
 export interface IGasMappingDto extends Omit<IGasMapping, keyof Document> {}
 
-export interface IDevice extends Document {
+export interface IDevice {
   id: string;
   name: string;
   identifier: string;
@@ -186,7 +186,7 @@ export interface IDevice extends Document {
   updatedAt: Date;
 }
 
-export interface INotification extends Document {
+export interface INotification {
   id: string;
   userId: string;
   notification: string;
