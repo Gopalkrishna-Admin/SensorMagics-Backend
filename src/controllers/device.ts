@@ -6,8 +6,7 @@ import {
   WeatherDataRange,
 } from "db/mongodb";
 import { NextFunction, Request, Response } from "express";
-import { ModifiedPathsSnapshot, Document, Model, Types, ClientSession, DocumentSetOptions, QueryOptions, UpdateQuery, AnyObject, PopulateOptions, MergeType, Query, SaveOptions, ToObjectOptions, FlattenMaps, Require_id, UpdateWithAggregationPipeline, pathsToSkip, Error } from "mongoose";
-import { EStatus, IClient, IGasMappingDto, IWeatherDataRange } from "types/mongodb";
+import { EStatus, IDeviceDto, IGasMappingDto, IWeatherDataRange } from "types/mongodb";
 import { ulid } from "ulid";
 import { CustomError } from "utils/response/custom-error/CustomError";
 
@@ -17,7 +16,7 @@ export const registerDevice = async (
   next: NextFunction
 ) => {
   try {
-    const { name, identifier, modelType, location } = req.body;
+    const { name, identifier, modelType, location, area, clusterType ,numberOfClusteredDevice} = req.body;
     const existingDevice = await Device.findOne({ identifier }).lean();
     if (existingDevice) {
       const customError = new CustomError(
@@ -36,6 +35,9 @@ export const registerDevice = async (
       name: name || identifier,
       clientId: null,
       status: EStatus.REGISTERED,
+      clusterType,
+      numberOfClusteredDevice,
+      area: `${area} sq ft`
     });
     await WeatherDataRange.create( {
       id: ulid(),
@@ -239,13 +241,17 @@ export const getUserDevices = async (
       id: user.clientId,
     }).lean();
 
-    const devicesToBeSent = devices.map((device) => ({
+    const devicesToBeSent: IDeviceDto[] = devices.map((device) => ({
       id: device.id,
       clientId: device.clientId,
       createdAt: device.createdAt,
       identifier: device.identifier,
       modelType: device.modelType,
       location: device.location,
+      area: device.area,
+      clusterType: device.clusterType,
+      firmwareVersion: device.firmwareVersion,
+      numberOfClusteredDevice: device.numberOfClusteredDevice,
       name: device.name,
       status: device.status,
       updatedAt: device.updatedAt,

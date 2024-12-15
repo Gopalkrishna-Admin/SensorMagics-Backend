@@ -22,6 +22,7 @@ export interface IWeatherData {
   gas6: number;
   timestamp: Date;
   deviceId: string;
+  deviceHealth: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -101,6 +102,11 @@ export enum EJobStatus {
   FAILED = "FAILED"
 }
 
+export enum EClusterType {
+  SINGLE = "SINGLE",
+  CLUSTERED = "CLUSTERED",
+}
+
 export interface IUser {
   id: string;
   name: string;
@@ -156,7 +162,7 @@ export interface IJob {
   note?: string;
 }
 
-export interface IClientDto extends Omit<Omit<IClient, keyof Document>,"logo"> {
+export interface IClientDto extends Omit<IClient,"logo"> {
   id: string;
   logo?: string;
   users: IUserDto[];
@@ -164,21 +170,25 @@ export interface IClientDto extends Omit<Omit<IClient, keyof Document>,"logo"> {
   gasMapping?: IGasMappingDto;
 }
 
-export interface IUserDto extends Omit<IUser, keyof Document> {
+export interface IUserDto extends IUser {
   id: string;
 }
 
-export interface IDeviceDto extends Omit<IDevice, keyof Document> {
+export interface IDeviceDto extends IDevice {
   id: string;
 }
 
-export interface IGasMappingDto extends Omit<IGasMapping, keyof Document> {}
+export interface IGasMappingDto extends IGasMapping {}
 
 export interface IDevice {
   id: string;
   name: string;
   identifier: string;
   location: string;
+  area: string;
+  clusterType: EClusterType;
+  numberOfClusteredDevice: number;
+  firmwareVersion : string;
   status: string;
   modelType: string;
   clientId: string;

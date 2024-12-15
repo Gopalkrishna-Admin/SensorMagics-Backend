@@ -13,6 +13,7 @@ import {
   IPreference,
   IJob,
   EJobStatus,
+  EClusterType,
 } from "types/mongodb";
 import { ulid } from "ulid";
 
@@ -81,6 +82,8 @@ const clientSchema = new Schema(
   }
 );
 
+const clusterTypes = [EClusterType.CLUSTERED, EClusterType.SINGLE];
+
 const deviceSchema = new Schema(
   {
     id: { type: String, default: ulid(), unique: true, required: true },
@@ -88,6 +91,10 @@ const deviceSchema = new Schema(
     identifier: { type: String, required: true },
     status: { type: String, enum: statuses, required: true },
     location: { type: String, required: true },
+    area: {type: String, required: true},
+    clusterType: {type: String, required: true, enum: clusterTypes, default: EClusterType.SINGLE},
+    numberOfClusteredDevice: {type: Number, required: true, default: 1},
+    firmwareVersion : {type: String, required: true, default: "1.0"},
     clientId: { type: String, ref: "Client" },
     modelType: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
