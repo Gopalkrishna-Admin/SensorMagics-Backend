@@ -48,6 +48,7 @@ export const consumeWeatherData = async () => {
         gas4: weatherData.gas4,
         gas5: weatherData.gas5,
         gas6: weatherData.gas6,
+        deviceHealth: weatherData.deviceHealth || '',
       };
       await WeatherData.create(data);
     } }catch (err) {
