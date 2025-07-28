@@ -1,8 +1,9 @@
 import { Job, WeatherData } from "db/mongodb";
 import { NextFunction, Request, Response } from "express";
+import { Attachment } from "resend";
 import { EJobStatus, IWeatherData } from "types/mongodb";
 import { ulid } from "ulid";
-import { AttachmentData, sendEmail } from "utils/email";
+import { sendEmail } from "utils/email";
 import { CustomError } from "utils/response/custom-error/CustomError";
 import XLSX from "xlsx";
 
@@ -357,16 +358,15 @@ async function sendReportEmail(
   buffer: Buffer
 ) {
   const base64File = buffer.toString("base64");
-  const attachments: AttachmentData[] = [
+  const attachments: Attachment[] = [
     {
       content: base64File,
-      disposition: "attachment",
       filename: `Report of ${deviceId}.xlsx`,
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     },
   ];
   await sendEmail({
-    from: process.env.SENDGRID_FROM!,
+    from: process.env.MAIL_DEFAULT_FROM!,
     to: email,
     html: "Attached is your requested weather report.",
     subject: `Report of ${deviceId} (${startDate.toDateString()} - ${endDate.toDateString()})`,

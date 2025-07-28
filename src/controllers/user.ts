@@ -137,7 +137,7 @@ export const generateCredentials = async (
     html = html.replace("#password#", password);
     html = html.replace("#url#", url);
     const sendEmailDto: SendEmailDto = {
-      from: process.env.SENDGRID_FROM!,
+      from: process.env.MAIL_DEFAULT_FROM!,
       to: existingUser.email,
       html,
       subject: "Credentails Generated",
@@ -721,7 +721,7 @@ export const forgotPassword = async (
       html = html.replace("#name#", user.name);
       html = html.replace("#ResetPasswordLink#", employeeResetPasswordLink);
       const sendEmailDto: SendEmailDto = {
-        from: process.env.SENDGRID_FROM!,
+        from: process.env.MAIL_DEFAULT_FROM!,
         to: user.email,
         html,
         subject: "Reset Password",
