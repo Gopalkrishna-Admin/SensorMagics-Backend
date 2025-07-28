@@ -1,4 +1,4 @@
-import sendGridMail from "@sendgrid/mail";
+import { Attachment, Resend } from "resend";
 import logger from "./logger";
 
 export const emailTemplatesFolder = `${process.cwd()}/src/controllers/templates/emailTemplates`;
@@ -8,25 +8,15 @@ export type SendEmailDto = {
   to: string;
   subject: string;
   html: string;
-  attachments?: AttachmentData[];
+  attachments?: Attachment[];
 };
 
-export type AttachmentData = {
-  
-    content: string;
-    filename:string;
-    type:string;
-    disposition:string;
-  
-}
-
 export const sendEmail = async (sendEmailDto: SendEmailDto) => {
-  const apiKey = process.env.SENDGRID_API_KEY!;
-  sendGridMail.setApiKey(apiKey);
-  const { from, to, subject, html,attachments } = sendEmailDto;
-  logger.info(`Sending Email from ${from} to ${to} `);
+  const { from, to, subject, html, attachments } = sendEmailDto;
+  logger.info(`Sending Email from ${from} to ${to}`);
   try {
-    const res = await sendGridMail.send({
+    const resend = new Resend(process.env.RESEND_API_KEY!);
+    const res = await resend.emails.send({
       to,
       from,
       subject,
