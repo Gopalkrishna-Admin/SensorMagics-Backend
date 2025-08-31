@@ -19,7 +19,16 @@ export const consumeWeatherData = async () => {
   client.on('message', async (topic, message) => {
     try {
       if (topic.startsWith('weather_data/')) {
-      const deviceId = topic.split("/")[1];
+        const str = message.toString().trim();
+        if (!str) {
+          // skip if empty message
+          return;
+        }
+        if (!isValidJsonObject(str)) {
+          // skip if not valid JSON object
+          return;
+        }
+        const deviceId = topic.split("/")[1];
       const weatherData = JSON.parse(message.toString());
       logger.info(`[x] Received data from device ${deviceId}:`, weatherData);
       const now = new Date();
@@ -59,3 +68,12 @@ export const consumeWeatherData = async () => {
     logger.error('MQTT Error from consumer side:', err);
   });
 };
+
+function isValidJsonObject(str: string): boolean {
+  try {
+    const parsed = JSON.parse(str);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed);
+  } catch {
+    return false;
+  }
+}
